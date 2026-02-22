@@ -1,0 +1,147 @@
+╔═══════════════════════════════════════════════════════════════╗
+║              VIBE-LEADS - START IN 5 MINUTES                  ║
+╚═══════════════════════════════════════════════════════════════╝
+
+▶ STEP 1: Install (30 seconds)
+  pip3 install anthropic pyyaml python-dotenv
+
+▶ STEP 2: Configure (1 minute)
+  cp .env.example .env
+  # Edit .env and add: ANTHROPIC_API_KEY=sk-ant-your-key
+
+▶ STEP 3: Test (30 seconds)
+  python3 example_usage.py
+
+▶ STEP 4: Add YOUR Leads (2 minutes)
+  # Edit my_leads.py - paste your LinkedIn/IndiaMART leads
+  python3 my_leads.py
+
+▶ STEP 5: Send Messages (1 minute)
+  # Open: data/messages/batch_*/
+  # Copy-paste messages to LinkedIn/Email
+  # Watch replies come in!
+
+═══════════════════════════════════════════════════════════════
+
+📋 DAILY WORKFLOW (15 min/day)
+
+1. Find 10-20 leads on LinkedIn/IndiaMART (10 min)
+   - Search: "order management chaos" + your keywords
+   - Look for: Owners/Directors posting problems
+   - Copy their EXACT post content
+
+2. Add to my_leads.py (2 min)
+   my_leads = [
+       {'name': '...', 'content': '...paste here...', ...},
+   ]
+
+3. Run analysis (30 sec)
+   python3 my_leads.py
+
+4. Send messages (2 min)
+   - Open: data/messages/batch_*/
+   - Send A+ and A lead messages
+   - Track responses
+
+═══════════════════════════════════════════════════════════════
+
+🎯 WHAT MAKES A QUALITY LEAD?
+
+✅ GOOD (A+ Lead):
+   "Managing 50+ dealer orders is chaos. Using WhatsApp and
+   Excel. Lost Rs 2L last month. Need proper system urgently."
+
+   → Specific problem, numbers, urgency, decision maker
+   → Will get personalized message
+   → ~30% reply rate
+
+❌ BAD (C Lead):
+   "Looking for software information for my project."
+
+   → Vague, no pain, student, no urgency
+   → Auto-rejected, no message generated
+   → Don't waste time
+
+═══════════════════════════════════════════════════════════════
+
+📊 EXPECTED RESULTS
+
+From 20 leads:
+  • 4-5 will be A+/A (20-25% qualification rate)
+  • You get 4-5 ready-to-send messages
+  • Expected replies: 1-2 (25-30% reply rate)
+  • Time investment: 15 minutes
+  • Potential: 1-2 sales calls booked
+
+From 100 leads/week:
+  • 20-25 qualified leads
+  • 5-8 replies
+  • 2-4 meetings
+  • 1-2 deals/month
+
+═══════════════════════════════════════════════════════════════
+
+📁 FILES YOU'LL USE
+
+EDIT THESE:
+  my_leads.py         ← Add your leads here daily
+  .env                ← Your API key
+  config/*.yaml       ← Customize for your business
+
+RUN THESE:
+  python3 my_leads.py           ← Process your leads
+  python3 example_usage.py      ← Test with examples
+
+CHECK THESE:
+  data/qualified/*.csv          ← See A+/A leads
+  data/messages/batch_*/        ← Copy messages from here
+
+═══════════════════════════════════════════════════════════════
+
+💡 PRO TIPS
+
+1. Quality > Quantity
+   20 perfect leads > 200 random contacts
+
+2. Look for Pain
+   People complaining = qualified leads
+   People browsing = waste of time
+
+3. Decision Makers Only
+   Owner, Director, Founder = Yes
+   Student, Intern, Researcher = No
+
+4. Specific = Better
+   "Lost Rs 2L" > "having issues"
+   "50+ dealers" > "many customers"
+
+5. Match Their Vibe
+   Urgent post → urgent response
+   Casual tone → casual reply
+   Formal → formal
+
+═══════════════════════════════════════════════════════════════
+
+🔥 START RIGHT NOW
+
+1. Open: my_leads.py
+2. Find 1 good lead on LinkedIn
+3. Paste their post content
+4. Run: python3 my_leads.py
+5. Check: data/messages/
+6. Send that message
+7. Repeat
+
+You're literally 5 minutes from your first quality lead.
+
+═══════════════════════════════════════════════════════════════
+
+📖 MORE INFO
+
+  START_TODAY.md      ← Detailed setup guide
+  README.md           ← Full documentation
+  SETUP.md            ← Phase 1 (Web UI) guide
+
+═══════════════════════════════════════════════════════════════
+
+Ready? Let's generate quality leads! 🚀

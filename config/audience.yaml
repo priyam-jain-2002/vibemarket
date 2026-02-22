@@ -1,0 +1,115 @@
+# Target Audience Definition
+# Who are your ideal customers?
+
+audience:
+  # Job titles to look for
+  titles:
+    primary:
+      - "Owner"
+      - "Founder"
+      - "Director"
+      - "Managing Director"
+    
+    secondary:
+      - "Operations Manager"
+      - "Operations Head"
+      - "Supply Chain Manager"
+      - "Procurement Manager"
+    
+    keywords:
+      - "industrial supplier"
+      - "manufacturer"
+      - "distributor"
+      - "dealer network"
+      - "B2B supplier"
+      - "wholesale"
+
+  # Industries to target
+  industries:
+    high_priority:
+      - "Auto Parts"
+      - "Electronics Components"
+      - "Industrial Machinery"
+      - "Chemicals"
+      - "Steel & Metals"
+      - "Building Materials"
+    
+    medium_priority:
+      - "Textiles"
+      - "Plastics"
+      - "Electrical Equipment"
+      - "Hardware"
+    
+    exclude:
+      - "B2C retail"
+      - "Services only"
+      - "Real estate"
+
+  # Geographic targeting
+  locations:
+    primary:
+      - "India"
+    
+    cities:
+      - "Mumbai"
+      - "Delhi"
+      - "Bangalore"
+      - "Chennai"
+      - "Pune"
+      - "Ahmedabad"
+      - "Surat"
+      - "Hyderabad"
+
+  # Company size indicators
+  company_size:
+    min_employees: 10
+    max_employees: 500
+    
+    indicators:
+      - "MSME"
+      - "SME"
+      - "small business"
+      - "mid-size"
+    
+    exclude:
+      - "enterprise"
+      - "Fortune 500"
+      - "MNC"
+
+  # Decision-making authority signals
+  authority_signals:
+    high:
+      - "owner"
+      - "founder"
+      - "director"
+      - "making decisions on"
+      - "we decided to"
+    
+    medium:
+      - "managing"
+      - "heading"
+      - "responsible for"
+      - "evaluating options"
+    
+    low:
+      - "assistant"
+      - "junior"
+      - "intern"
+      - "exploring" # unless paired with authority
+
+# Quality filters
+quality_criteria:
+  # Lead must have at least ONE of these
+  required_signals:
+    - "posts about operational challenges"
+    - "asks questions about solutions"
+    - "shares frustrations about current process"
+    - "mentions specific pain points"
+  
+  # Automatically disqualify if present
+  disqualify_signals:
+    - "student"
+    - "looking for job"
+    - "seeking investment"
+    - "promoting product"
+    - "spam patterns"

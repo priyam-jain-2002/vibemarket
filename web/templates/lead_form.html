@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}{% if lead %}Edit Lead{% else %}New Lead{% endif %} - Vibe-Leads{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto space-y-6">
+    <!-- Header -->
+    <div>
+        <a href="/leads" class="text-blue-600 hover:underline">← Back to Leads</a>
+        <h1 class="text-3xl font-bold text-gray-900 mt-4">
+            {% if lead %}Edit Lead{% else %}Add New Lead{% endif %}
+        </h1>
+        <p class="text-gray-600 mt-1">
+            {% if lead %}Update lead information{% else %}Manually add a lead to analyze{% endif %}
+        </p>
+    </div>
+
+    <!-- Form -->
+    <form method="post" action="/leads/new" class="bg-white rounded-lg shadow p-6 space-y-6">
+        <!-- Name (Required) -->
+        <div>
+            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">
+                Name <span class="text-red-500">*</span>
+            </label>
+            <input type="text"
+                   id="name"
+                   name="name"
+                   value="{% if lead %}{{ lead.name }}{% endif %}"
+                   required
+                   placeholder="Rajesh Kumar"
+                   class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            <p class="text-xs text-gray-500 mt-1">Full name of the lead</p>
+        </div>
+
+        <!-- Title -->
+        <div>
+            <label for="title" class="block text-sm font-medium text-gray-700 mb-1">
+                Job Title
+            </label>
+            <input type="text"
+                   id="title"
+                   name="title"
+                   value="{% if lead %}{{ lead.title }}{% endif %}"
+                   placeholder="Owner / Director / Manager"
+                   class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            <p class="text-xs text-gray-500 mt-1">Job title helps determine decision-making authority</p>
+        </div>
+
+        <!-- Company -->
+        <div>
+            <label for="company" class="block text-sm font-medium text-gray-700 mb-1">
+                Company Name
+            </label>
+            <input type="text"
+                   id="company"
+                   name="company"
+                   value="{% if lead %}{{ lead.company }}{% endif %}"
+                   placeholder="Kumar Auto Parts"
+                   class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+        </div>
+
+        <!-- Email -->
+        <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
+                Email Address
+            </label>
+            <input type="email"
+                   id="email"
+                   name="email"
+                   value="{% if lead %}{{ lead.email }}{% endif %}"
+                   placeholder="rajesh@kumarautoparts.com"
+                   class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+        </div>
+
+        <!-- Phone -->
+        <div>
+            <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">
+                Phone Number
+            </label>
+            <input type="tel"
+                   id="phone"
+                   name="phone"
+                   value="{% if lead %}{{ lead.phone }}{% endif %}"
+                   placeholder="+91 98765 43210"
+                   class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+        </div>
+
+        <!-- Content (Important for AI Analysis) -->
+        <div>
+            <label for="content" class="block text-sm font-medium text-gray-700 mb-1">
+                Lead Content / Post <span class="text-blue-600">*</span>
+            </label>
+            <textarea
+                id="content"
+                name="content"
+                rows="8"
+                placeholder="Managing orders from 50+ dealers is absolute chaos. Using WhatsApp for orders, Excel for tracking, and lost 3 orders this week because messages got buried. Need a proper system ASAP."
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">{% if lead %}{{ lead.content }}{% endif %}</textarea>
+            <p class="text-xs text-gray-500 mt-1">
+                This is what Claude AI analyzes to detect pain points and score the lead.
+                Paste their LinkedIn post, IndiaMART requirement, or any content mentioning their problems.
+            </p>
+        </div>
+
+        <!-- Source URL -->
+        <div>
+            <label for="url" class="block text-sm font-medium text-gray-700 mb-1">
+                Source URL
+            </label>
+            <input type="url"
+                   id="url"
+                   name="url"
+                   value="{% if lead %}{{ lead.url }}{% endif %}"
+                   placeholder="https://www.linkedin.com/posts/..."
+                   class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            <p class="text-xs text-gray-500 mt-1">LinkedIn post URL, IndiaMART link, etc.</p>
+        </div>
+
+        <!-- Source Type -->
+        <div>
+            <label for="source" class="block text-sm font-medium text-gray-700 mb-1">
+                Source Type
+            </label>
+            <select id="source"
+                    name="source"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                <option value="manual" {% if not lead or lead.source == 'manual' %}selected{% endif %}>Manual Entry</option>
+                <option value="linkedin" {% if lead and lead.source == 'linkedin' %}selected{% endif %}>LinkedIn</option>
+                <option value="indiamart" {% if lead and lead.source == 'indiamart' %}selected{% endif %}>IndiaMART</option>
+                <option value="twitter" {% if lead and lead.source == 'twitter' %}selected{% endif %}>Twitter/X</option>
+                <option value="email" {% if lead and lead.source == 'email' %}selected{% endif %}>Email</option>
+                <option value="referral" {% if lead and lead.source == 'referral' %}selected{% endif %}>Referral</option>
+                <option value="other" {% if lead and lead.source == 'other' %}selected{% endif %}>Other</option>
+            </select>
+        </div>
+
+        <!-- Submit Buttons -->
+        <div class="flex space-x-4 pt-4 border-t">
+            <button type="submit"
+                    class="flex-1 px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium">
+                {% if lead %}Update Lead{% else %}Add Lead{% endif %}
+            </button>
+            <a href="/leads"
+               class="px-6 py-3 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 font-medium text-center">
+                Cancel
+            </a>
+        </div>
+
+        <!-- Help Text -->
+        <div class="bg-blue-50 border border-blue-200 rounded-md p-4">
+            <h3 class="text-sm font-semibold text-blue-900 mb-2">💡 Tips for Better Results</h3>
+            <ul class="text-xs text-blue-800 space-y-1">
+                <li>• The "Lead Content" field is most important for AI analysis</li>
+                <li>• Include their exact words mentioning problems or pain points</li>
+                <li>• More specific content = better quality score</li>
+                <li>• Job title helps determine if they're a decision maker</li>
+            </ul>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Vibe-Leads{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
+            <p class="text-gray-600 mt-1">Quality-first lead generation overview</p>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="flex space-x-3">
+            <a href="/leads/new/form"
+               class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium">
+                ➕ Add Lead
+            </a>
+            <a href="/scrapers"
+               class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 font-medium">
+                🔍 Run Scraper
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Total Leads -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm font-medium">Total Leads</p>
+                    <p class="text-3xl font-bold text-gray-900 mt-2">{{ stats.total_leads }}</p>
+                </div>
+                <div class="text-4xl">📊</div>
+            </div>
+            <p class="text-sm text-gray-500 mt-2">All time</p>
+        </div>
+
+        <!-- Analyzed Today -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm font-medium">Analyzed Today</p>
+                    <p class="text-3xl font-bold text-gray-900 mt-2">{{ stats.analyzed_today }}</p>
+                </div>
+                <div class="text-4xl">🤖</div>
+            </div>
+            <p class="text-sm text-gray-500 mt-2">Claude AI analysis</p>
+        </div>
+
+        <!-- Qualified Leads (A+/A) -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm font-medium">Qualified (A+/A)</p>
+                    <p class="text-3xl font-bold text-green-600 mt-2">{{ stats.qualified_leads }}</p>
+                </div>
+                <div class="text-4xl">⭐</div>
+            </div>
+            <p class="text-sm text-gray-500 mt-2">
+                {% if stats.total_leads > 0 %}
+                    {{ ((stats.qualified_leads / stats.total_leads) * 100) | round(1) }}% qualification rate
+                {% else %}
+                    No leads yet
+                {% endif %}
+            </p>
+        </div>
+
+        <!-- Contacted This Week -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm font-medium">Contacted (7d)</p>
+                    <p class="text-3xl font-bold text-blue-600 mt-2">{{ stats.contacted_this_week }}</p>
+                </div>
+                <div class="text-4xl">📧</div>
+            </div>
+            <p class="text-sm text-gray-500 mt-2">
+                {{ stats.reply_rate }}% reply rate
+            </p>
+        </div>
+    </div>
+
+    <!-- Two Column Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Recent Leads (2/3 width) -->
+        <div class="lg:col-span-2 bg-white rounded-lg shadow">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xl font-bold text-gray-900">Recent Leads</h2>
+                    <a href="/leads" class="text-blue-600 hover:underline text-sm font-medium">
+                        View All →
+                    </a>
+                </div>
+            </div>
+
+            <div class="divide-y divide-gray-200">
+                {% if recent_leads %}
+                    {% for lead in recent_leads %}
+                    <a href="/leads/{{ lead.id }}"
+                       class="block p-6 hover:bg-gray-50 transition-colors">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <!-- Lead Score Badge -->
+                                {% if lead.score %}
+                                <span class="score-badge score-{{ lead.score.lower().replace('+', '-plus') }}">
+                                    {{ lead.score }}
+                                </span>
+                                {% else %}
+                                <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-sm">
+                                    Not Analyzed
+                                </span>
+                                {% endif %}
+
+                                <!-- Lead Info -->
+                                <h3 class="text-lg font-semibold text-gray-900 mt-2">
+                                    {{ lead.name }}
+                                </h3>
+
+                                <p class="text-gray-600 text-sm mt-1">
+                                    {% if lead.title %}{{ lead.title }}{% endif %}
+                                    {% if lead.company %}
+                                        {% if lead.title %} • {% endif %}
+                                        {{ lead.company }}
+                                    {% endif %}
+                                </p>
+
+                                <!-- Content Preview -->
+                                {% if lead.content %}
+                                <p class="text-gray-700 text-sm mt-2 line-clamp-2">
+                                    "{{ lead.content[:150] }}..."
+                                </p>
+                                {% endif %}
+
+                                <!-- Meta Info -->
+                                <div class="flex items-center space-x-4 mt-3 text-xs text-gray-500">
+                                    <span>{{ lead.source.capitalize() }}</span>
+                                    <span>•</span>
+                                    <span>{{ lead.created_at.strftime('%b %d, %Y') }}</span>
+                                    {% if lead.urgency %}
+                                    <span>•</span>
+                                    <span class="{% if lead.urgency == 'HIGH' %}text-red-600 font-semibold{% endif %}">
+                                        {{ lead.urgency }}
+                                    </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Action Button -->
+                            <div class="ml-4">
+                                {% if not lead.score %}
+                                <button
+                                    hx-post="/leads/{{ lead.id }}/analyze"
+                                    hx-swap="none"
+                                    hx-indicator="#spinner-{{ lead.id }}"
+                                    class="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">
+                                    Analyze
+                                    <span id="spinner-{{ lead.id }}" class="htmx-indicator">...</span>
+                                </button>
+                                {% else %}
+                                <a href="/leads/{{ lead.id }}"
+                                   class="px-3 py-1 bg-gray-100 text-gray-700 rounded text-sm hover:bg-gray-200">
+                                    View
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                {% else %}
+                    <div class="p-12 text-center">
+                        <p class="text-gray-500">No leads yet. Add your first lead to get started!</p>
+                        <a href="/leads/new/form"
+                           class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                            Add First Lead
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Conversion Funnel (1/3 width) -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="p-6 border-b border-gray-200">
+                <h2 class="text-xl font-bold text-gray-900">Conversion Funnel</h2>
+            </div>
+
+            <div class="p-6 space-y-4">
+                {% set funnel_data = [
+                    {'label': 'New', 'count': funnel.new, 'color': 'gray'},
+                    {'label': 'Analyzed', 'count': funnel.analyzed, 'color': 'blue'},
+                    {'label': 'Contacted', 'count': funnel.contacted, 'color': 'indigo'},
+                    {'label': 'Replied', 'count': funnel.replied, 'color': 'green'},
+                    {'label': 'Won', 'count': funnel.won, 'color': 'emerald'}
+                ] %}
+
+                {% for stage in funnel_data %}
+                <div>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span class="font-medium text-gray-700">{{ stage.label }}</span>
+                        <span class="text-gray-900 font-semibold">{{ stage.count }}</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        {% if stats.total_leads > 0 %}
+                        <div class="bg-{{ stage.color }}-500 h-2 rounded-full"
+                             style="width: {{ (stage.count / stats.total_leads * 100) | round(1) }}%">
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="p-6 border-t border-gray-200 space-y-2">
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-600">Replied Leads:</span>
+                    <span class="font-semibold text-gray-900">{{ stats.replied_leads }}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-600">Won Deals:</span>
+                    <span class="font-semibold text-green-600">{{ stats.won_leads }}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-600">Reply Rate:</span>
+                    <span class="font-semibold text-blue-600">{{ stats.reply_rate }}%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Score Distribution -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">Lead Quality Distribution</h2>
+
+        <div class="grid grid-cols-4 gap-4">
+            {% for score, count in stats.score_distribution.items() %}
+            <div class="text-center p-4 bg-gray-50 rounded-lg">
+                <span class="score-badge score-{{ score.lower().replace('+', '-plus') }} text-lg">
+                    {{ score }}
+                </span>
+                <p class="text-3xl font-bold text-gray-900 mt-2">{{ count }}</p>
+                <p class="text-sm text-gray-500 mt-1">
+                    {% if stats.total_leads > 0 %}
+                        {{ ((count / stats.total_leads) * 100) | round(1) }}%
+                    {% else %}
+                        0%
+                    {% endif %}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

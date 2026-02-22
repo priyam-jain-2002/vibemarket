@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+
+{% block title %}Leads - Vibe-Leads{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900">All Leads</h1>
+            <p class="text-gray-600 mt-1">{{ total_leads }} total leads</p>
+        </div>
+
+        <a href="/leads/new/form"
+           class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium">
+            ➕ Add New Lead
+        </a>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <form method="get" action="/leads" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <!-- Search -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+                <input type="text"
+                       name="search"
+                       value="{{ filters.search or '' }}"
+                       placeholder="Name, company, content..."
+                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <!-- Score Filter -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Score</label>
+                <select name="score"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">All Scores</option>
+                    <option value="A+" {% if filters.score == 'A+' %}selected{% endif %}>A+ (Top Quality)</option>
+                    <option value="A" {% if filters.score == 'A' %}selected{% endif %}>A (High Quality)</option>
+                    <option value="B" {% if filters.score == 'B' %}selected{% endif %}>B (Medium)</option>
+                    <option value="C" {% if filters.score == 'C' %}selected{% endif %}>C (Low)</option>
+                </select>
+            </div>
+
+            <!-- Status Filter -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <select name="status"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">All Statuses</option>
+                    <option value="new" {% if filters.status == 'new' %}selected{% endif %}>New</option>
+                    <option value="analyzed" {% if filters.status == 'analyzed' %}selected{% endif %}>Analyzed</option>
+                    <option value="contacted" {% if filters.status == 'contacted' %}selected{% endif %}>Contacted</option>
+                    <option value="replied" {% if filters.status == 'replied' %}selected{% endif %}>Replied</option>
+                    <option value="won" {% if filters.status == 'won' %}selected{% endif %}>Won</option>
+                    <option value="lost" {% if filters.status == 'lost' %}selected{% endif %}>Lost</option>
+                </select>
+            </div>
+
+            <!-- Source Filter -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Source</label>
+                <select name="source"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">All Sources</option>
+                    <option value="linkedin" {% if filters.source == 'linkedin' %}selected{% endif %}>LinkedIn</option>
+                    <option value="manual" {% if filters.source == 'manual' %}selected{% endif %}>Manual</option>
+                    <option value="twitter" {% if filters.source == 'twitter' %}selected{% endif %}>Twitter</option>
+                </select>
+            </div>
+
+            <!-- Submit Buttons -->
+            <div class="md:col-span-4 flex space-x-2">
+                <button type="submit"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium">
+                    Apply Filters
+                </button>
+                <a href="/leads"
+                   class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 font-medium">
+                    Clear
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Leads Table -->
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+        {% if leads %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Score
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Lead
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Pain Points
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Status
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Source
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Date
+                        </th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for lead in leads %}
+                    <tr class="hover:bg-gray-50">
+                        <!-- Score -->
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {% if lead.score %}
+                            <span class="score-badge score-{{ lead.score.lower().replace('+', '-plus') }}">
+                                {{ lead.score }}
+                            </span>
+                            {% else %}
+                            <span class="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">
+                                —
+                            </span>
+                            {% endif %}
+                        </td>
+
+                        <!-- Lead Info -->
+                        <td class="px-6 py-4">
+                            <div>
+                                <a href="/leads/{{ lead.id }}"
+                                   class="text-sm font-semibold text-gray-900 hover:text-blue-600">
+                                    {{ lead.name }}
+                                </a>
+                                <p class="text-sm text-gray-600">
+                                    {% if lead.title %}{{ lead.title }}{% endif %}
+                                    {% if lead.company %}
+                                        {% if lead.title %} • {% endif %}
+                                        {{ lead.company }}
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </td>
+
+                        <!-- Pain Points -->
+                        <td class="px-6 py-4">
+                            {% if lead.pain_points %}
+                            <div class="text-sm text-gray-700">
+                                {% for pain in lead.pain_points[:2] %}
+                                <span class="inline-block px-2 py-1 bg-red-50 text-red-700 rounded text-xs mr-1 mb-1">
+                                    {{ pain }}
+                                </span>
+                                {% endfor %}
+                                {% if lead.pain_points|length > 2 %}
+                                <span class="text-xs text-gray-500">+{{ lead.pain_points|length - 2 }}</span>
+                                {% endif %}
+                            </div>
+                            {% else %}
+                            <span class="text-sm text-gray-400">—</span>
+                            {% endif %}
+                        </td>
+
+                        <!-- Status -->
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs capitalize">
+                                {{ lead.status }}
+                            </span>
+                        </td>
+
+                        <!-- Source -->
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 capitalize">
+                            {{ lead.source }}
+                        </td>
+
+                        <!-- Date -->
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            {{ lead.created_at.strftime('%b %d, %Y') }}
+                        </td>
+
+                        <!-- Actions -->
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                            <a href="/leads/{{ lead.id }}"
+                               class="text-blue-600 hover:text-blue-900">
+                                View
+                            </a>
+                            {% if not lead.score %}
+                            <button
+                                hx-post="/leads/{{ lead.id }}/analyze"
+                                hx-swap="none"
+                                class="text-green-600 hover:text-green-900">
+                                Analyze
+                            </button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if total_pages > 1 %}
+        <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
+            <div class="flex justify-between items-center">
+                <div class="text-sm text-gray-700">
+                    Page {{ page }} of {{ total_pages }}
+                </div>
+
+                <div class="flex space-x-2">
+                    {% if page > 1 %}
+                    <a href="?page={{ page - 1 }}{% if filters.score %}&score={{ filters.score }}{% endif %}{% if filters.status %}&status={{ filters.status }}{% endif %}{% if filters.source %}&source={{ filters.source }}{% endif %}{% if filters.search %}&search={{ filters.search }}{% endif %}"
+                       class="px-3 py-1 bg-white border border-gray-300 rounded-md hover:bg-gray-50 text-sm">
+                        Previous
+                    </a>
+                    {% endif %}
+
+                    {% if page < total_pages %}
+                    <a href="?page={{ page + 1 }}{% if filters.score %}&score={{ filters.score }}{% endif %}{% if filters.status %}&status={{ filters.status }}{% endif %}{% if filters.source %}&source={{ filters.source }}{% endif %}{% if filters.search %}&search={{ filters.search }}{% endif %}"
+                       class="px-3 py-1 bg-white border border-gray-300 rounded-md hover:bg-gray-50 text-sm">
+                        Next
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% else %}
+        <!-- Empty State -->
+        <div class="p-12 text-center">
+            <p class="text-gray-500 mb-4">No leads found matching your filters.</p>
+            <a href="/leads"
+               class="inline-block px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
+                Clear Filters
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

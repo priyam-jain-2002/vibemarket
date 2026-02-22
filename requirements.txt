@@ -1,0 +1,74 @@
+# ============================================================================
+# CORE DEPENDENCIES (Required)
+# ============================================================================
+pyyaml>=6.0.1
+python-dotenv>=1.0.0
+
+# ============================================================================
+# LLM BACKENDS (Install at least ONE)
+# ============================================================================
+
+# Anthropic Claude (Recommended - best quality)
+anthropic>=0.40.0
+
+# OpenAI GPT-4 (Alternative - if you have OpenAI API key)
+# openai>=1.12.0
+
+# Google Gemini (Alternative - free tier available)
+# google-generativeai>=0.3.0
+
+# Ollama (Local/Free - install Ollama separately)
+# No package needed - just run: ollama serve
+
+# ============================================================================
+# WEB FRAMEWORK (Phase 1 - for Web UI)
+# ============================================================================
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+jinja2>=3.1.3
+python-multipart>=0.0.9
+
+# ============================================================================
+# DATABASE (Phase 1 - for Web UI)
+# ============================================================================
+sqlalchemy>=2.0.25
+alembic>=1.13.1
+
+# ============================================================================
+# WEB SCRAPING (Phase 2 - for automation)
+# ============================================================================
+playwright>=1.48.0
+# playwright-stealth>=1.1.0  # Optional - for extra stealth
+beautifulsoup4>=4.12.0
+requests>=2.31.0
+
+# ============================================================================
+# DATA HANDLING
+# ============================================================================
+pandas>=2.1.0
+
+# ============================================================================
+# AUTOMATION (Optional)
+# ============================================================================
+# schedule>=1.2.0
+
+# ============================================================================
+# QUICK INSTALL COMMANDS
+# ============================================================================
+#
+# Minimal (CLI only with Claude):
+#   pip install anthropic pyyaml python-dotenv
+#
+# Minimal (CLI with OpenAI):
+#   pip install openai pyyaml python-dotenv
+#
+# Minimal (CLI with Gemini - FREE!):
+#   pip install google-generativeai pyyaml python-dotenv
+#
+# Full setup (Web UI + Claude):
+#   pip install -r requirements.txt
+#
+# Full setup (Web UI + OpenAI):
+#   pip install fastapi uvicorn sqlalchemy jinja2 python-multipart openai pyyaml python-dotenv
+#
+# ============================================================================

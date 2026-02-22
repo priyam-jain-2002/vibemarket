@@ -1,0 +1,171 @@
+# Pain Points & Signal Detection
+# This is THE MOST IMPORTANT file for lead quality
+# The better you define pain points, the better the leads
+
+pain_points:
+  # Core problems your product solves
+  primary_pains:
+    - name: "Order Management Chaos"
+      description: "Multiple channels causing confusion and lost orders"
+      
+      explicit_signals:
+        # Direct mentions
+        - "WhatsApp orders getting lost"
+        - "Excel order tracking"
+        - "phone orders difficult to track"
+        - "order coordination nightmare"
+        - "managing orders across channels"
+        - "lost orders"
+        - "missed orders"
+        - "order errors"
+      
+      implicit_signals:
+        # Indirect indicators
+        - "too many customer calls"
+        - "coordination issues with dealers"
+        - "communication breakdown"
+        - "manual order entry"
+        - "duplicate orders"
+      
+      urgency_indicators:
+        high:
+          - "losing money on"
+          - "lost orders this week"
+          - "crisis"
+          - "emergency"
+          - "can't continue like this"
+        
+        medium:
+          - "struggling with"
+          - "getting harder"
+          - "overwhelmed"
+          - "need better way"
+        
+        low:
+          - "exploring options"
+          - "thinking about"
+          - "considering"
+      
+      # What would a high-quality lead say?
+      ideal_lead_examples:
+        - "Managing orders from 50+ dealers across WhatsApp, calls, and Excel. Lost 3 orders this week alone due to miscommunication."
+        - "Our order process is killing us - dealers call, text, email. No single source of truth. Urgent need for solution."
+        - "How do other distributors handle order tracking? We're drowning in manual coordination."
+
+    - name: "Inventory Tracking Issues"
+      description: "Can't track stock levels accurately across locations"
+      
+      explicit_signals:
+        - "inventory tracking mess"
+        - "stock count errors"
+        - "warehouse chaos"
+        - "can't track inventory"
+        - "stockout problems"
+        - "overstocking issues"
+        - "manual stock counting"
+      
+      implicit_signals:
+        - "running out of stock"
+        - "excess inventory"
+        - "don't know what we have"
+        - "warehouse coordination"
+        - "inventory discrepancies"
+      
+      ideal_lead_examples:
+        - "Manual inventory tracking across 3 warehouses. Constant stockouts because we don't have real-time visibility."
+        - "Excel-based inventory is failing us. Too many locations, too much manual updating."
+
+    - name: "Dealer/Distributor Coordination"
+      description: "Managing network of dealers/distributors inefficiently"
+      
+      explicit_signals:
+        - "managing dealers difficult"
+        - "distributor coordination"
+        - "dealer network chaos"
+        - "too many dealers to track"
+        - "dealer communication issues"
+      
+      implicit_signals:
+        - "dealers calling constantly"
+        - "distributor complaints"
+        - "network management"
+        - "channel coordination"
+      
+      ideal_lead_examples:
+        - "Managing 100+ dealers manually. No visibility into what each dealer has ordered or needs."
+        - "Dealer network growing but systems aren't. Need automated coordination."
+
+  # Secondary pain points (lower priority but still relevant)
+  secondary_pains:
+    - name: "Manual Processes"
+      signals:
+        - "too much manual work"
+        - "manual data entry"
+        - "repetitive tasks"
+        - "no automation"
+    
+    - name: "Scalability Issues"
+      signals:
+        - "can't scale current process"
+        - "growth breaking our systems"
+        - "manual process doesn't scale"
+
+# Lead Scoring Matrix
+scoring:
+  # What makes an A+ lead?
+  a_plus_criteria:
+    required:
+      - "explicit pain point mention"
+      - "decision-making authority"
+      - "high urgency signals"
+      - "specific numbers/details"
+    
+    examples:
+      - "Owner posting: 'Lost 5 orders this month due to WhatsApp chaos. Need solution ASAP.'"
+      - "Managing Director: 'Our 80-person ops team can't keep up with order coordination. Breaking point.'"
+  
+  # What makes an A lead?
+  a_criteria:
+    required:
+      - "clear pain point"
+      - "decision-making authority OR clear influence"
+      - "medium urgency"
+    
+    examples:
+      - "Operations Head: 'Looking for better order management system. Current Excel setup struggling.'"
+      - "Founder: 'How do other suppliers handle multi-channel orders?'"
+  
+  # What makes a B lead?
+  b_criteria:
+    required:
+      - "pain point mentioned"
+      - "unclear authority OR low urgency"
+    
+    examples:
+      - "Manager: 'Exploring inventory tracking options for our warehouse.'"
+      - "Someone mentions problem but no urgency"
+  
+  # Auto-disqualify (C or rejected)
+  disqualify:
+    - "No pain point mentioned"
+    - "Clearly not decision maker"
+    - "Not in target industry"
+    - "Not in target geography"
+    - "Spam/promotional content"
+
+# Signal Strength Weights
+# Used by AI to evaluate lead quality
+signal_weights:
+  explicit_pain_mention: 10      # They literally say "I have this problem"
+  specific_numbers: 8            # "Lost 3 orders" vs vague "losing orders"
+  urgency_words: 7               # "urgent", "crisis", "ASAP"
+  decision_authority: 9          # Owner/Founder/Director
+  recent_post: 6                 # Posted in last 7 days
+  industry_match: 8              # In target industry
+  company_size_match: 5          # Right company size
+  asks_for_solution: 7           # "Looking for", "need", "help with"
+  
+  # Negative signals
+  too_vague: -5                  # "Something better" vs specific need
+  promotional: -10               # Trying to sell, not expressing pain
+  student_researcher: -10        # Not a buyer

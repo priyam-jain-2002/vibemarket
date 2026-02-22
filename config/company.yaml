@@ -1,0 +1,73 @@
+# Company & Product Configuration
+# Customize this for your business
+
+company:
+  name: "Opbase"
+  product: "Order Operations Platform"
+  tagline: "Centralized order management for industrial suppliers"
+  website: "https://opbase.in"
+  
+# What problems does your product solve?
+value_propositions:
+  primary:
+    - "Replace WhatsApp/Excel/phone-based order chaos with centralized system"
+    - "Real-time inventory tracking across warehouses"
+    - "Automated dealer and distributor coordination"
+  
+  metrics:
+    - "Cut order errors by 80%"
+    - "Reduce order processing time from hours to minutes"
+    - "Eliminate stockout losses"
+
+# Who are your existing customers? (helps with targeting)
+customer_examples:
+  industries:
+    - "Auto parts suppliers"
+    - "Electronics distributors"
+    - "Industrial machinery dealers"
+    - "Chemical suppliers"
+  
+  company_sizes:
+    - "10-50 employees"
+    - "50-200 employees"
+    - "200-500 employees"
+
+# How should the AI communicate?
+communication_style:
+  tone: "conversational"  # Options: formal, conversational, casual, technical
+  language: "Indian English"  # Natural phrasing for target market
+  
+  avoid:
+    - "corporate buzzwords"
+    - "overly salesy language"
+    - "marketing jargon"
+    - "aggressive CTAs"
+  
+  prefer:
+    - "specific examples"
+    - "concrete numbers"
+    - "practical language"
+    - "peer-to-peer tone"
+
+# Proof points to reference
+social_proof:
+  case_studies:
+    - industry: "bearing distributor"
+      result: "reduced ops team from 8 to 3 people"
+    - industry: "electronics supplier"
+      result: "eliminated 90% of order coordination calls"
+  
+  testimonials:
+    - "Finally got our dealer network under control"
+    - "No more lost orders in WhatsApp chaos"
+
+# What's your ideal next step with leads?
+call_to_action:
+  primary: "share the playbook"  # Not "schedule a call"
+  secondary: "show how it works"
+  tertiary: "compare approaches"
+  
+  avoid:
+    - "book a demo"
+    - "schedule a call"
+    - "sign up now"
