@@ -18,6 +18,7 @@ import os
 import sys
 from datetime import datetime
 from scrapers.linkedin_scraper import LinkedInScraper
+from scrapers.reddit_scraper import RedditScraper
 from processors.claude_processor import LeadProcessor
 from storage.storage import LeadStorage
 
@@ -43,7 +44,8 @@ def main():
         sys.exit(1)
 
     # Initialize components
-    scraper = LinkedInScraper(headless=False)  # headless=True to hide browser
+    linkedin_scraper = LinkedInScraper(headless=False)  # headless=True to hide browser
+    reddit_scraper = RedditScraper()
     processor = LeadProcessor(config_dir="config")
     storage = LeadStorage(data_dir="data")
 
@@ -56,21 +58,30 @@ def main():
         print(f"   Limit: {LEAD_LIMIT}")
         print()
 
-        if not scraper.login(LINKEDIN_EMAIL, LINKEDIN_PASSWORD):
-            print("❌ Login failed. Exiting.")
+        all_leads = []
+        
+        # Scrape LinkedIn
+        if not linkedin_scraper.login(LINKEDIN_EMAIL, LINKEDIN_PASSWORD):
+            print("⚠️  LinkedIn Login failed. Skipping LinkedIn and proceeding to Reddit.")
+        else:
+            linkedin_leads = linkedin_scraper.search_posts(query=SEARCH_QUERY, limit=LEAD_LIMIT)
+            print(f"✅ Found {len(linkedin_leads)} leads from LinkedIn\n")
+            all_leads.extend(linkedin_leads)
+
+        # Scrape Reddit
+        reddit_leads = reddit_scraper.search_posts(query=SEARCH_QUERY, limit=LEAD_LIMIT)
+        print(f"✅ Found {len(reddit_leads)} leads from Reddit\n")
+        all_leads.extend(reddit_leads)
+
+        if not all_leads:
+            print("⚠️  No leads found from any source. Try different keywords.")
             return
 
-        leads = scraper.search_posts(query=SEARCH_QUERY, limit=LEAD_LIMIT)
-
-        if not leads:
-            print("⚠️  No leads found. Try different keywords.")
-            return
-
-        print(f"✅ Found {len(leads)} leads")
+        print(f"🎯 Total: Found {len(all_leads)} leads across all sources")
         print()
 
         # Save raw leads
-        raw_filename = storage.save_raw_leads(leads, source="linkedin_auto")
+        raw_filename = storage.save_raw_leads(all_leads, source="linkedin_and_reddit_auto")
         print(f"💾 Saved raw leads: {raw_filename}")
         print()
 
@@ -89,7 +100,7 @@ def main():
         print("📍 STEP 3: AI ANALYSIS & QUALIFICATION")
         print()
 
-        results = processor.process_batch(leads)
+        results = processor.process_batch(all_leads)
 
         # =====================================================================
         # STEP 4: SAVE RESULTS
@@ -122,7 +133,7 @@ def main():
         print("=" * 80)
 
         stats = {
-            'found': len(leads),
+            'found': len(all_leads),
             'a_plus': sum(1 for r in results if r['analysis'].get('score') == 'A+'),
             'a': sum(1 for r in results if r['analysis'].get('score') == 'A'),
             'b': sum(1 for r in results if r['analysis'].get('score') == 'B'),
@@ -149,7 +160,8 @@ def main():
 
     finally:
         # Cleanup
-        scraper.close()
+        linkedin_scraper.close()
+        reddit_scraper.close()
         print("\n🔒 Cleanup complete")
 
 
