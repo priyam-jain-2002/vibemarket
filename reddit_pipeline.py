@@ -9,7 +9,7 @@ def main():
     print("🤖 REDDIT LEAD GENERATION PIPELINE")
     print("=" * 80)
     
-    SEARCH_QUERY = 'order management chaos'
+    SEARCH_QUERY = 'excel inventory tracking nightmare'
     LEAD_LIMIT = 5
     
     scraper = RedditScraper()
@@ -39,7 +39,7 @@ def main():
         
         storage.save_processed_results(results)
         
-        qualified = [r for r in results if r['analysis'].get('score') in ['A+', 'A']]
+        qualified = [r for r in results if r['analysis'].get('score') in ['A+', 'A', 'B']]
         
         if qualified:
             storage.save_qualified_leads(results)

@@ -298,7 +298,7 @@ The message should feel like it's from a peer who genuinely wants to help, not a
         Only for A+ and A leads
         """
 
-        if analysis['score'] not in ['A+', 'A']:
+        if analysis['score'] not in ['A+', 'A', 'B']:
             return None
 
         try:
@@ -357,7 +357,7 @@ The message should feel like it's from a peer who genuinely wants to help, not a
         
         # Step 2: Generate message if qualified
         message = None
-        if analysis['score'] in ['A+', 'A']:
+        if analysis['score'] in ['A+', 'A', 'B']:
             print(f"   ✅ Qualified - Generating message...")
             message = self.generate_message(lead, analysis)
         else:
